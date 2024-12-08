@@ -1,4 +1,7 @@
 A rusty Luau module meant to be used with strictly-typed luau.
+
+[Toolbox link](https://create.roblox.com/store/asset/123174237649775/rustd)
+
 ### Types
 `Result<T,E>` - A union of Ok and Err types.
 
