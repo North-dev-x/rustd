@@ -28,7 +28,7 @@ rustd:match(num,
 ```lua
 local result: Result<number,string> = -- 
 rustd:match(result.into_pair(),
-	{"Ok", function(val: number) print(val) return val end}.
+	{"Ok", function(val: number) print(val) return val end},
 	{"Err", function(errmsg: string) return error(errmsg) end}
 )
 ```
