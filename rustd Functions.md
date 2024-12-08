@@ -45,6 +45,25 @@ rustd:match_casetbl(num, {
 ```
 *A small demonstration of different case definitions, but this time inside of a table.*
 
+###### Ok
+```lua
+function rustd.Ok<T>(value: T): Ok<T>
+```
+Wraps `value` in an `Ok`, and returns it.
+
+###### Err
+```lua
+function rustd.Err<E>(err: E): Err<E>
+```
+Wraps `err` in an `Err`, and returns it.
+`Err` can be of any type, i.e `rustd.Err(3)`
+
+###### Pair
+```lua
+function rustd.Pair(...:): Pair<any,any>
+```
+Wraps the given arguments, or a single table of 2 values, in a `Pair`, and returns it.
+
 ###### find_child
 ```lua
 function rustd:find_child(parent: Instance, pattern: string): Result<Instance,string>
