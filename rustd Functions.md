@@ -25,6 +25,15 @@ rustd:match(num,
 ```
 *A small demonstration of different case definitions.*
 
+```lua
+local result: Result<number,string> = -- 
+rustd:match(result.into_pair(),
+	{"Ok", function(val: number) print(val) return val end}.
+	{"Err", function(errmsg: string) return error(errmsg) end}
+)
+```
+*A small demonstration of usage of match to destructure results.*
+
 ###### match_casetbl
 ```lua
 function rustd:match_casetbl<T>(value_to_match: T, cases: {any}): any
