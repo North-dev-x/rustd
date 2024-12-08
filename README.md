@@ -25,9 +25,13 @@ A rusty luau module meant to be used with strictly-typed luau.
 
 ### Documentation
 [Result](Result.md)
+
 [Option](Option.md)
+
 [Pair](Pair.md)
+
 [rustd Functions](rustd%20Functions.md)
+
 
 ### Conclusion
 Please don't be afraid to leave suggestions for other implementations you would want me to try to add in this module! I'll try my best to add them!
