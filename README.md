@@ -37,3 +37,4 @@ A rusty Luau module meant to be used with strictly-typed luau.
 
 ### Conclusion
 Please don't be afraid to leave suggestions for other implementations you would want me to try to add in this module! I'll try my best to add them!
+This module will not work with the new type solver until it is fully released, unfortunately.
