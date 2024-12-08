@@ -13,6 +13,8 @@ A rusty Luau module meant to be used with strictly-typed luau.
 ### Functions
 `rustd:match<T>(value_to_match: T, ...: {any}): any`
 
+`rustd:match_casetbl<T>(value_to_match: T, cases: {any}): any`
+
 `rustd:find_child(parent: Instance, pattern: string): Result<Instance,string>`
 
 `rustd:find_child_of_class(parent: Instance, class_name: string): Result<Instance,string>`
