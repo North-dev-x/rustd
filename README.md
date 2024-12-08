@@ -1,4 +1,4 @@
-A rusty luau module meant to be used with strictly-typed luau.
+A rusty Luau module meant to be used with strictly-typed luau.
 ### Types
 `Result<T,E>` - A union of Ok and Err types.
 
