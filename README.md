@@ -2,9 +2,9 @@ A rusty Luau module meant to be used with strictly-typed luau.
 ### Types
 `Result<T,E>` - A union of Ok and Err types.
 
-	`Ok<T>` - A success result.
+`Ok<T>` - A success result.
  
-	`Err<T>` - An error result.
+`Err<T>` - An error result.
  
 `Option<T>` - A union of T and nil. Used as an alternative to `T?` when it might be preferable.
 
