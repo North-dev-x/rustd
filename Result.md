@@ -115,14 +115,14 @@ Returns the type of the Result, being "Ok" or "Err".
 ```lua
 err: () -> Option<T>;
 ```
-Returns the error message wrapped in a `Some` if the `Result` is `Err`.
-Returns a `None` if the `Result` is `Ok`.
+Returns the error message if the `Result` is `Err`.
+Returns `nil` if the `Result` is `Ok`.
 
 ###### ok
 ```lua
 ok: () -> Option<T>;
 ```
-Returns the value wrapped in a `Some` if the `Result` is `Ok`.
-Returns a `None` if the `Result` is `Err`.
+Returns the `value` if the `Result` is `Ok`.
+Returns `nil` if the `Result` is `Err`.
 
 
