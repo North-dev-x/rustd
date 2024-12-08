@@ -74,7 +74,7 @@ end
 	[THIS IS UNSAFE]
 	Only use if you know what you're doing.
 
-	Used internally by Result.type_of() in rustd:match to streamline the usage experience.
+	Used internally by Result.into_pair() in rustd:match to streamline the usage experience.
 	Can be used as a return value for functions you want to have the same match behavior.
 ]]
 export type Pair<A,B> = {
