@@ -8,8 +8,6 @@ A rusty Luau module meant to be used with strictly-typed luau.
 `Ok<T>` - A success result.
  
 `Err<T>` - An error result.
- 
-`Option<T>` - A union of T and nil. Used as an alternative to `T?` when it might be preferable.
 
 `Pair<A,B>` - Unsafe type used internally to streamline matching with `rustd:match`.
 
@@ -30,8 +28,6 @@ A rusty Luau module meant to be used with strictly-typed luau.
 
 ### Documentation
 [Result](Result.md)
-
-[Option](Option.md)
 
 [Pair](Pair.md)
 
