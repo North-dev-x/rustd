@@ -2,18 +2,16 @@
 
 local rustd = {}
 
+
+
 --[[
 	Use as a function return signature or variable type, i.e function x(): Result<number,string>
 	Result takes 2 generics, the first being the type of the Ok, and the second being the type of the Err.
 ]] 
 export type Result<T, E> = Ok<T> | Err<E>
 
---[[
-	Union type of given T or nil.
-	Can be used for functions that potentially return nil as an alternative to T?.
-	Use as a function return signature or variable type, i.e function x(): Option<number>
-]] 
-export type Option<T> = T | nil
+
+
 
 type __base_result_type<T> = {
 	type_of: () -> "Ok" | "Err";
@@ -21,8 +19,8 @@ type __base_result_type<T> = {
 	unwrap: () -> any;
 	unwrap_or: <D>(D) -> D | any;
 	unwrap_or_else: ((unknown) -> any) -> any;
-	err: () -> Option<T>;
-	ok: () -> Option<T>;
+	err: () -> unknown?;
+	ok: () -> unknown?;
 	expect: <V>(V) -> V | any;
 }
 
@@ -42,7 +40,7 @@ function rustd.Ok<T>(value: T): Ok<T>
 		unwrap = function() return value end;
 		unwrap_or = function() return value end;
 		unwrap_or_else = function() return value end;
-		err = function() return nil end;
+		err = function() return end;
 		ok = function() return value end;
 		expect = function() return value end;
 	} :: Ok<T>
