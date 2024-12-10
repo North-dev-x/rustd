@@ -113,14 +113,14 @@ Returns the type of the Result, being "Ok" or "Err".
 
 ###### err
 ```lua
-err: () -> Option<T>;
+err: () -> unknown?;
 ```
 Returns the error message if the `Result` is `Err`.
 Returns `nil` if the `Result` is `Ok`.
 
 ###### ok
 ```lua
-ok: () -> Option<T>;
+ok: () -> unknown?;
 ```
 Returns the `value` if the `Result` is `Ok`.
 Returns `nil` if the `Result` is `Err`.
