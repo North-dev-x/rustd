@@ -5,7 +5,7 @@ This type is mostly used internally to make `Result.into_pair` convenient to mat
 
 1. Unsafe meaning less type-safe than other types in this module. Nothing is inherently going to be perfectly safe, but `--!strict` helps with type safety.
 ### Pair
-```lua
+```luau
 export type Pair<A,B> = {
 	[number]: A | B;
 }
@@ -14,7 +14,7 @@ Type equal to a pair of 2 keys and values.
 Constructed with `rustd.Pair(arg1,arg2)` or `rustd.Pair({arg1,arg2})` if you want to use a table.
 
 ### Methods
-```lua
+```luau
 type_of: () -> "Pair";
 ```
 Returns the fact that the `Pair` is, in fact, a `Pair`.
