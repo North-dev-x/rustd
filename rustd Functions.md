@@ -1,6 +1,6 @@
 A group of helpful functions!
 ###### match
-```lua
+```luau
 function rustd:match<T>(value_to_match: T, ...: {any}): any
 ```
 Matches value_to_match with all given cases.
@@ -12,7 +12,7 @@ Cases must be defined with function arguments. For passing a table of functions 
 A default case may be defined by using `{"default", return_value_or_function}`, and will be ran if no other cases resolve.
 
 
-```lua
+```luau
 local num: number = 3;
 rustd:match(num, 
 	{0, function() return "Number zero!" end},
@@ -25,7 +25,7 @@ rustd:match(num,
 ```
 *A small demonstration of different case definitions.*
 
-```lua
+```luau
 local result: Result<number,string> = -- 
 rustd:match(result.into_pair(),
 	{"Ok", function(val: number) print(val) return val end},
@@ -35,13 +35,13 @@ rustd:match(result.into_pair(),
 *A small demonstration of usage of match to destructure results.*
 
 ###### match_casetbl
-```lua
+```luau
 function rustd:match_casetbl<T>(value_to_match: T, cases: {any}): any
 ```
 Works the exact same way as `rustd:match`, but takes in a table of cases rather than a variable number of arguments.
 
 
-```lua
+```luau
 local num: number = 3;
 rustd:match_casetbl(num, {
 	{0, function() return "Number zero!" end},
@@ -55,26 +55,26 @@ rustd:match_casetbl(num, {
 *A small demonstration of different case definitions, but this time inside of a table.*
 
 ###### Ok
-```lua
+```luau
 function rustd.Ok<T>(value: T): Ok<T>
 ```
 Wraps `value` in an `Ok`, and returns it.
 
 ###### Err
-```lua
+```luau
 function rustd.Err<E>(err: E): Err<E>
 ```
 Wraps `err` in an `Err`, and returns it.
 `Err` can be of any type, i.e `rustd.Err(3)`
 
 ###### Pair
-```lua
+```luau
 function rustd.Pair(...:): Pair<any,any>
 ```
 Wraps the given arguments, or a single table of 2 values, in a `Pair`, and returns it.
 
 ###### find_child
-```lua
+```luau
 function rustd:find_child(parent: Instance, pattern: string): Result<Instance,string>
 ```
 Similar to `Instance:FindFirstChild()`, but returns a Result.
@@ -82,7 +82,7 @@ Similar to `Instance:FindFirstChild()`, but returns a Result.
 `Err` if the child is not found.
 
 ###### find_child_of_class
-```lua
+```luau
 function rustd:find_child_of_class(parent: Instance, class_name: string): Result<Instance,string>
 ```
 Similar to `Instance:FindFirstChildOfClass()`, but returns a Result.
@@ -90,7 +90,7 @@ Similar to `Instance:FindFirstChildOfClass()`, but returns a Result.
 `Err` if the child is not found.
 
 ###### find_descendant
-```lua
+```luau
 function rustd:find_descendant(parent: Instance, pattern: string): Result<Instance,string>
 ```
 Searches for a descendant of `parent` with the given `pattern`.
@@ -98,7 +98,7 @@ Searches for a descendant of `parent` with the given `pattern`.
 `Err` if the descendant is not found.
 
 ###### find_descendant_of_class
-```lua
+```luau
 function rustd:find_descendant_of_class(parent: Instance, class_name: string): Result<Instance,string>
 ```
 Searches for a descendant of `parent` of type `class_name`.
@@ -106,7 +106,7 @@ Searches for a descendant of `parent` of type `class_name`.
 `Err` if the descendant is not found.
 
 ###### push_error
-```lua
+```luau
 function rustd:push_error(err: string): ()
 ```
 Outputs an error(red text) without halting execution.
