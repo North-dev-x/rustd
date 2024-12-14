@@ -1,25 +1,25 @@
 Type for handling errors as values.
 ## Types
 #### Ok
-```lua
+```luau
 export type Ok<T> = {...}
 ```
 The success variant of a Result. Intended to be returned in the "happy path" of a function.
 Constructed with `rustd.Ok(value)`.
 ### Err
 
-```lua
+```luau
 export type Err<E> = {...}
 ```
 The failure variant of a Result. Intended to be returned in failure states of a function.
 Constructed with `rustd.Err(value)`.
 #### Result
-```lua
+```luau
 export type Result<T, E> = Ok<T> | Err<E>
 ```
 A union type of `Ok` and `Err`. Used as a function return signature or variable type.
 
-```lua
+```luau
 function div(a: number,b: number): rustd.Result<number,string>
 	if b == 0 then
 		return rustd.Err("Cannot divide by zero.")
@@ -30,14 +30,14 @@ end
 
 ## Methods
 ###### unwrap
-```lua
+```luau
 unwrap: () -> any;
 ```
 Unwraps the `Result`, returning the value inside the `Ok` or `Err` value.
 Errors if the `Result` is not `Ok`.
 
 Intended to be used as a placeholder for fast prototyping, and replaced with better error handling when security is needed.
-```lua
+```luau
 function div(a: number,b: number): rustd.Result<number,string>
 	if b == 0 then
 		return rustd.Err("Cannot divide by zero.")
@@ -49,7 +49,7 @@ local divided_num = div(2,1).unwrap()
 ```
 
 ###### into_pair
-```lua
+```luau
 into_pair: () -> Pair<any, any>;
 ```
 Converts the result into a pair, to be used with `rustd:match`.
@@ -60,7 +60,7 @@ The second field of the pair is equivalent to `Result.unwrap()`, but will not pa
 `rustd:match` will pass the first field to the case, and the second field to the given function.
 
 This is the main way of handling results.
-```lua
+```luau
 function parse_number(str: string): rustd.Result<number,string>
 	local success, result = pcall(function()
 		return tonumber(str)
@@ -79,47 +79,47 @@ local divided_num = rustd:match(parse_number(string_to_parse).into_pair(),
 ```
 
 ##### unwrap_or
-```lua
+```luau
 unwrap_or: <D>(D) -> D | any;
 ```
 Returns the value inside the `Result` if it is `Ok`.
 Returns the given default value if it is `Err`.
 
 ###### unwrap_or_else
-```lua
+```luau
 unwrap_or_else: ((unknown) -> any) -> any;
 ```
 Returns the value inside the `Result` if it is `Ok`.
 Calls the function given as callback if it is `Err`, passing the `Err`'s message as first argument.
-```lua
+```luau
 local divided_num = div(10,5).unwrap_or_else(function(err: unknown)
 	print("Failed division. Reason: "..err)
 end)
 ```
 ###### expect
-```lua
+```luau
 expect: <M>(M) -> M | any;
 ```
 Returns the value inside the `Result` if it is `Ok`.
 Throws an error with the given message `M` if the `Result` is `Err`.
-```lua
+```luau
 local fail = parse_number("Hello!").expect("Failed.") -- Throws error "Failed."
 ```
 ###### type_of
-```lua
+```luau
 type_of: () -> "Ok" | "Err";
 ```
 Returns the type of the Result, being "Ok" or "Err".
 
 ###### err
-```lua
+```luau
 err: () -> unknown?;
 ```
 Returns the error message if the `Result` is `Err`.
 Returns `nil` if the `Result` is `Ok`.
 
 ###### ok
-```lua
+```luau
 ok: () -> unknown?;
 ```
 Returns the `value` if the `Result` is `Ok`.
