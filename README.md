@@ -24,6 +24,8 @@ A rusty Luau module meant to be used with strictly-typed luau.
 
 `rustd:find_descendant_of_class(parent: Instance, class_name: string): Result<Instance,string>`
 
+`rustd:rcall<T>(func: (...any?) -> T,...): Result<T,string>`
+
 `rustd:push_error(msg: string): ()`
 
 ### Documentation
