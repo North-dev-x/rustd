@@ -249,6 +249,15 @@ function rustd:find_descendant_of_class(parent, class_name: string): Result<Inst
 	return rustd.Ok(child)
 end
 
+function rustd:rcall<T>(func: (...any?) -> T,...): Result<T,string>
+	local success, result = pcall(func,...)
+	if success then
+		return rustd.Ok(result)
+	else
+		return rustd.Err(result)
+	end
+end
+
 -- Pushes an error(red text) without halting execution.
 function rustd:push_error(err: string): ()
 	task.spawn(error,err);
