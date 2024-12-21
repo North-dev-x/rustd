@@ -105,6 +105,24 @@ Searches for a descendant of `parent` of type `class_name`.
 `Ok` if the descendant is found.
 `Err` if the descendant is not found.
 
+###### rcall
+```luau
+function rustd:rcall<T>(func: (...any?) -> T,...): Result<T,string>
+```
+Acts like a lua `pcall`, but returns a Result instead of a boolean and return value.
+
+Usage:
+```luau
+local result = rustd:rcall(function() 
+	if math.random(1,2) == 1 then
+		error("Failed")
+	else
+		return "Number 2!"
+	end
+end)
+print(result.unwrap())
+```
+
 ###### push_error
 ```luau
 function rustd:push_error(err: string): ()
