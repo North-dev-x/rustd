@@ -59,12 +59,12 @@ function rustd.Err<E>(err: E): Err<E>
 	return {
 		type_of = function() return "Err" end;
 		into_pair = function() return rustd.Pair("Err",err) end;
-		unwrap = function() return error("Unwrapped an Err: "..tostring(err)) end;
+		unwrap = function() return error("Unwrapped an Err: "..tostring(err),2) end;
 		unwrap_or = function(default_val) return default_val end;
 		unwrap_or_else = function(callback) return callback(err) end;
 		err = function() return err end;
 		ok = function() return nil end;
-		expect = function(msg) return error(msg) end;
+		expect = function(msg) return error(msg,2) end;
 	} :: Err<E>
 end
 
@@ -249,7 +249,7 @@ function rustd:find_descendant_of_class(parent, class_name: string): Result<Inst
 	return rustd.Ok(child)
 end
 
-function rustd:rcall<T>(func: (...any?) -> T,...): Result<T,string>
+function rustd:rcall<T>(func: (...any?) -> T?,...): Result<T,string>
 	local success, result = pcall(func,...)
 	if success then
 		return rustd.Ok(result)
