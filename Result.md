@@ -58,13 +58,11 @@ Allows you to match on the result's type, and get its value as a function argume
 This is the main way of handling results.
 ```luau
 function parse_number(str: string): rustd.Result<number,string>
-	local success, result = pcall(function()
-		return tonumber(str)
-	end)
-	if not success then
+	local num = tonumber(str)
+	if not num then
 		return rustd.Err("Failed to parse number from string: "..str)
 	end
-	return rustd.Ok(result)
+	return rustd.Ok(num)
 end
 
 local string_to_parse = "5"
