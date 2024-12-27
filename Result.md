@@ -50,14 +50,10 @@ local divided_num = div(2,1).unwrap()
 
 ###### into_pair
 ```luau
-into_pair: () -> Pair<any, any>;
+match: ({{"Ok" | "Err" | any}}) -> unknown?; 
 ```
-Converts the result into a pair, to be used with `rustd:match`.
+Allows you to match on the result's type, and get its value as a function argument within the match.
 
-The first field of the pair is equivalent to `Result.type_of()`
-The second field of the pair is equivalent to `Result.unwrap()`, but will not panic if the `Result` is `Err`.
-
-`rustd:match` will pass the first field to the case, and the second field to the given function.
 
 This is the main way of handling results.
 ```luau
@@ -72,10 +68,10 @@ function parse_number(str: string): rustd.Result<number,string>
 end
 
 local string_to_parse = "5"
-local divided_num = rustd:match(parse_number(string_to_parse).into_pair(),
+local divided_num = parse_number(string_to_parse).match {
 	{"Ok", function(val: number) return val end},
 	{"Err", function(err: string) return error(err) end}
-)
+}
 ```
 
 ##### unwrap_or
