@@ -9,8 +9,6 @@ A rusty Luau module meant to be used with strictly-typed luau.
  
 `Err<T>` - An error result.
 
-`Pair<A,B>` - Unsafe type used internally to streamline matching with `rustd:match`.
-
 ### Functions
 `rustd:match<T>(value_to_match: T, ...: {any}): any`
 
