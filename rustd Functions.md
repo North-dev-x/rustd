@@ -107,6 +107,7 @@ print(result.unwrap())
 
 ###### push_error
 ```luau
-function rustd.push_error(err: string): ()
+function rustd.push_error(err: string, show_traceback: boolean?): ()
 ```
 Outputs an error(red text) without halting execution.
+Will show a traceback in a following warning if show_traceback is enabled or left blank.
