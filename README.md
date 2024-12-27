@@ -10,9 +10,7 @@ A rusty Luau module meant to be used with strictly-typed luau.
 `Err<T>` - An error result.
 
 ### Functions
-`rustd:match<T>(value_to_match: T, ...: {any}): any`
-
-`rustd:match_casetbl<T>(value_to_match: T, cases: {any}): any`
+`function rustd.match<T>(value_to_match: T, r: any?): ({{any}}) -> any`
 
 `rustd:find_child(parent: Instance, pattern: string): Result<Instance,string>`
 
@@ -28,8 +26,6 @@ A rusty Luau module meant to be used with strictly-typed luau.
 
 ### Documentation
 [Result](Result.md)
-
-[Pair](Pair.md)
 
 [rustd Functions](rustd%20Functions.md)
 
