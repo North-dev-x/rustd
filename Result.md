@@ -48,7 +48,7 @@ end
 local divided_num = div(2,1).unwrap()
 ```
 
-###### into_pair
+###### match
 ```luau
 match: ({{"Ok" | "Err" | any}}) -> unknown?; 
 ```
