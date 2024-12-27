@@ -15,13 +15,13 @@ export type Result<T, E> = Ok<T> | Err<E>
 
 type __base_result_type<T> = {
 	type_of: () -> "Ok" | "Err";
-	into_pair: () -> Pair<any, any>;
 	unwrap: () -> any;
 	unwrap_or: <D>(D) -> D | any;
 	unwrap_or_else: ((unknown) -> any) -> any;
 	err: () -> unknown?;
 	ok: () -> unknown?;
 	expect: <V>(V) -> V | any;
+	match: ({{"Ok" | "Err" | any}}) -> unknown?; 
 }
 
 -- The Ok variant of a Result.
@@ -36,13 +36,13 @@ export type Ok<T> = __base_result_type<T>
 function rustd.Ok<T>(value: T): Ok<T>
 	return {
 		type_of = function() return "Ok" end;
-		into_pair = function() return rustd.Pair("Ok",value) end;
 		unwrap = function() return value end;
 		unwrap_or = function() return value end;
 		unwrap_or_else = function() return value end;
 		err = function() return end;
 		ok = function() return value end;
 		expect = function() return value end;
+		match = rustd.match("Ok",value);
 	} :: Ok<T>
 end
 
@@ -58,56 +58,25 @@ export type Err<E> = __base_result_type<E>;
 function rustd.Err<E>(err: E): Err<E>
 	return {
 		type_of = function() return "Err" end;
-		into_pair = function() return rustd.Pair("Err",err) end;
-		unwrap = function() return error("Unwrapped an Err: "..tostring(err),2) end;
+		unwrap = function() return error("Unwrapped an Err: "..tostring(err)) end;
 		unwrap_or = function(default_val) return default_val end;
 		unwrap_or_else = function(callback) return callback(err) end;
 		err = function() return err end;
 		ok = function() return nil end;
-		expect = function(msg) return error(msg,2) end;
+		expect = function(msg) return error(msg) end;
+		match = rustd.match("Err",err);
 	} :: Err<E>
 end
 
---[[
-	[THIS IS UNSAFE]
-	Only use if you know what you're doing.
 
-	Used internally by Result.into_pair() in rustd:match to streamline the usage experience.
-	Can be used as a return value for functions you want to have the same match behavior.
-]]
-export type Pair<A,B> = {
-	[number]: A | B;
-	type_of: () -> "Pair";
-}
-
---[[
-	[THIS IS UNSAFE]
-	Only use if you know what you're doing.
-	
-	Constructs a Pair. This is only used for rustd:match(). 
-	
-	When value_to_match is a Pair, the first parameter of the Pair will be matched, and the second parameter will be passed to case functions.
-	This behaviour is mostly used internally to streamline matching Result.type_of().
-]]
-function rustd.Pair(...): Pair<any,any>
-	local args = {...}
-	if #args > 2 then
-		return error("Pair can only have 2 arguments.")
+function _extract_cases(cases: {{any}}): { any}
+	local processed = {}
+	for _,item in cases do
+		table.insert(processed,item[1])
+		table.insert(processed,item[2])
 	end
-	if #args == 1 and typeof(args[1]) == "table" then
-		args = args[1];
-		if #args > 2 then
-			return error("Pair can only have 2 arguments.")
-		end
-	end
-	return {
-		[1] = args[1];
-		[2] = args[2];
-		type_of = function() return "Pair" end;
-	} :: Pair<any,any>
+	return processed
 end
-
-type case<T> = T | string;
 
 --[[
 	Matches value_to_match with all given cases.
@@ -121,88 +90,34 @@ type case<T> = T | string;
 	When value_to_match is a Pair, the first parameter of the Pair will be matched, and the second parameter will be passed to case functions.
 	This behaviour is mostly used internally to streamline matching Result.type_of().
 ]]
-function rustd:match<T>(value_to_match: T, ...: {any}): any
-	local cases = {...};
-	if typeof(value_to_match) == "table" and value_to_match["type_of"] ~= nil and value_to_match.type_of() == "Pair" then
-		-- Logic for Pair
+
+function rustd.match<T>(value_to_match: T, r: any?): ({{any}}) -> any
+	return function(t: {{any}}): any
+		local cases = _extract_cases(t);
+		local key = table.find(cases,value_to_match) 
 		
-		for _,arg: any in ipairs(cases) do
-			local case: case<T> = arg[1]
-			local value: (any) -> any | any = arg[2];
-			if value_to_match[1] == case or case == "default" then
-				if type(value) == "function" then
-					return value(value_to_match[2]);
-				else
-					return value
-				end
+		if not key then
+			key = table.find(cases,"default")
+		end
+		
+		if key then
+			local _, val = next(cases,key)
+			if r then value_to_match = r end
+			if typeof(val) == "function" then
+				return val(value_to_match)
+			else
+				return val
 			end
 		end
+		warn("No match found; possible non-exhaustive pattern match which can return nil. Try adding more cases, or a 'default' case.")
 		return nil
-		
-	else
-		-- Logic for non-Pair
-		
-		for _,arg: any in ipairs(cases) do
-			local case: case<T> = arg[1]
-			local value: (T) -> any | any = arg[2];
-			if value_to_match == case or case == "default" then
-				if type(value) == "function" then
-					return value(value_to_match);
-				else
-					return value
-				end
-			end
-		end
-		return nil
-		
 	end
-
-end
-
---[[
-	Same thing as `rustd:match`, but uses a table of cases rather than a variable number of arguments.
-]]
-function rustd:match_casetbl<T>(value_to_match: T, cases: {any}): any
-	if typeof(value_to_match) == "table" and value_to_match["type_of"] ~= nil and value_to_match.type_of() == "Pair" then
-		-- Logic for Pair
-
-		for _,arg: any in ipairs(cases) do
-			local case: case<T> = arg[1]
-			local value: (any) -> any | any = arg[2];
-			if value_to_match[1] == case or case == "default" then
-				if type(value) == "function" then
-					return value(value_to_match[2]);
-				else
-					return value
-				end
-			end
-		end
-		return nil
-
-	else
-		-- Logic for non-Pair
-
-		for _,arg: any in ipairs(cases) do
-			local case: case<T> = arg[1]
-			local value: (T) -> any | any = arg[2];
-			if value_to_match == case or case == "default" then
-				if type(value) == "function" then
-					return value(value_to_match);
-				else
-					return value
-				end
-			end
-		end
-		return nil
-
-	end
-
 end
 
 --[[
 	Searches for a child of the parent with pattern as the name, returning a Result. 
 ]]
-function rustd:find_child(parent: Instance, pattern: string): Result<Instance,string>
+function rustd.find_child(parent: Instance, pattern: string): Result<Instance,string>
 	local child = parent:FindFirstChild(pattern)
 	if child == nil then
 		return rustd.Err("Failed to find child "..pattern.." inside "..parent.Name)
@@ -213,7 +128,7 @@ end
 --[[
 	Searches for a child of the parent with the given ClassName, returning a Result. 
 ]]
-function rustd:find_child_of_class(parent: Instance, class_name: string): Result<Instance,string>
+function rustd.find_child_of_class(parent: Instance, class_name: string): Result<Instance,string>
 	local child = parent:FindFirstChildOfClass(class_name);
 	if child == nil then
 		return rustd.Err("Failed to find child with class "..class_name.." inside "..parent.Name)
@@ -224,7 +139,7 @@ end
 --[[
 	Searches for a descendant of the parent with pattern as the name, returning a Result. 
 ]]
-function rustd:find_descendant(parent, pattern: string): Result<Instance,string>
+function rustd.find_descendant(parent, pattern: string): Result<Instance,string>
 	local child = parent:FindFirstChild(pattern,true)
 	if child == nil then
 		return rustd.Err("Failed to find descendant "..pattern.." inside "..parent.Name)
@@ -235,7 +150,7 @@ end
 --[[
 	Searches for a descendant of the parent with given ClassName, returning a Result. 
 ]]
-function rustd:find_descendant_of_class(parent, class_name: string): Result<Instance,string>
+function rustd.find_descendant_of_class(parent, class_name: string): Result<Instance,string>
 	local child
 	for i,v: Instance in ipairs(parent:GetDescendants()) do
 		if v.ClassName == class_name then
@@ -249,7 +164,7 @@ function rustd:find_descendant_of_class(parent, class_name: string): Result<Inst
 	return rustd.Ok(child)
 end
 
-function rustd:rcall<T>(func: (...any?) -> T?,...): Result<T,string>
+function rustd.rcall<T>(func: (...any?) -> T,...): Result<T,string>
 	local success, result = pcall(func,...)
 	if success then
 		return rustd.Ok(result)
@@ -259,8 +174,14 @@ function rustd:rcall<T>(func: (...any?) -> T?,...): Result<T,string>
 end
 
 -- Pushes an error(red text) without halting execution.
-function rustd:push_error(err: string): ()
+function rustd.push_error(err: string,show_traceback: boolean?): ()
 	task.spawn(error,err);
+	if show_traceback == nil or show_traceback == true then
+		warn("Stack Trace: ".. debug.traceback("",2))
+	end
 end
 
+
+
 return rustd
+
