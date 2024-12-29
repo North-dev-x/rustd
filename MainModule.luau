@@ -10,9 +10,6 @@ local rustd = {}
 ]] 
 export type Result<T, E> = Ok<T> | Err<E>
 
-
-
-
 type __base_result_type<T> = {
 	type_of: () -> "Ok" | "Err";
 	unwrap: () -> any;
@@ -49,6 +46,7 @@ end
 -- The Err variant of a Result.
 export type Err<E> = __base_result_type<E>;
 
+
 --[[
 	Wraps err in an Err.
 	Usage:
@@ -82,13 +80,14 @@ end
 	Matches value_to_match with all given cases.
 	A case must be defined by using {case_match, return_value_or_function} 
 	i.e.
-	{true, function(val: boolean) return "Value is true!" end},
-	{"default" = "I'm unsure."}
+	
+	rustd.match (value) {
+		{true, function(val: boolean) return "Value is true!" end},
+		{"default" = "I'm unsure."}
+	}
 	
 	First parameter of a case's function will be the value passed in match.
-	
-	When value_to_match is a Pair, the first parameter of the Pair will be matched, and the second parameter will be passed to case functions.
-	This behaviour is mostly used internally to streamline matching Result.type_of().
+
 ]]
 
 function rustd.match<T>(value_to_match: T, r: any?): ({{any}}) -> any
@@ -164,7 +163,10 @@ function rustd.find_descendant_of_class(parent, class_name: string): Result<Inst
 	return rustd.Ok(child)
 end
 
-function rustd.rcall<T>(func: (...any?) -> T,...): Result<T,string>
+--[[
+	Similar to a pcall, but returns a Result instead of (boolean, any)
+]]
+function rustd.rcall<T>(func: (...any?) -> ...T,...): Result<T,string>
 	local success, result = pcall(func,...)
 	if success then
 		return rustd.Ok(result)
