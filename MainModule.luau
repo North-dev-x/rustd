@@ -166,7 +166,7 @@ end
 --[[
 	Similar to a pcall, but returns a Result instead of (boolean, any)
 ]]
-function rustd.rcall<T>(func: (...any?) -> ...T,...): Result<T,string>
+function rustd.rcall<T>(func: (...any?) -> T,...): Result<T,string>
 	local success, result = pcall(func,...)
 	if success then
 		return rustd.Ok(result)
