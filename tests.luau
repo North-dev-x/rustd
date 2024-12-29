@@ -16,7 +16,7 @@ end
 
 test("ResultMatch", function() 
 	local SomeResult: std.Result<string,string> = Ok("Foo")  
-	
+
 	local result = std.rcall(function()
 		return SomeResult.match { 
 			{"Ok", function(result) return result end},
@@ -43,5 +43,25 @@ test("StandardMatch", function()
 		{"default", "I can't count that high..."}
 	}
 	print(matched)
+	return 0;
+end)
+
+test("rcall",function()
+	-- single return ok
+	local result = std.rcall(function(num)
+		num = 30;
+		return num
+	end, 5)
+	local ok = result.expect("should be ok")
+	 
+	-- single return err
+	result = std.rcall(function()
+		return error("HELLO")
+	end)
+	local err = result.err()
+	if err == nil then
+		return error("That function should error.")
+	end
+	
 	return 0;
 end)
