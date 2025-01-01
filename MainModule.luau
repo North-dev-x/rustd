@@ -15,10 +15,10 @@ type __base_result_type<T> = {
 	unwrap: () -> any;
 	unwrap_or: <D>(D) -> D | any;
 	unwrap_or_else: ((unknown) -> any) -> any;
-	err: () -> unknown?;
-	ok: () -> unknown?;
+	err: () -> any?;
+	ok: () -> any?;
 	expect: <V>(V) -> V | any;
-	match: ({{"Ok" | "Err" | any}}) -> unknown?; 
+	match: ({{"Ok" | "Err" | any}}) -> any?; 
 }
 
 -- The Ok variant of a Result.
